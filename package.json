@@ -18,6 +18,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "discord.js": "^13.0.0-dev.d433fe8.1626004976",
+    "log-symbols": "^5.0.0",
     "typescript": "^4.3.5"
   },
   "devDependencies": {

@@ -1,24 +1,25 @@
 import {Client, Intents} from "discord.js"
 import fs from "fs"
 import axios from "axios"
+import logSymbols from "log-symbols"
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
 
 if(!fs.existsSync("config.json")) {
-	console.log("Config file not set! Copy example.config.json and set your own values.")
+	console.log(logSymbols.error, "Config file not set! Copy example.config.json and set your own values.")
 	process.exit(0)
 }
 
 const config = JSON.parse(fs.readFileSync("config.json").toString())
 
 if(!fs.existsSync(config.capedir)) {
-	console.log("Could not find directory to store capes in! Fix your config.json")
+	console.log(logSymbols.error, "Could not find directory to store capes in! Fix your config.json")
 	process.exit(0)
 }
 
 
 client.on("ready", async () => {
-	console.log(`Logged in as ${client.user.tag}!`)
+	console.log(logSymbols.success, `Logged in as ${client.user.tag}!`)
 })
 
 
@@ -44,7 +45,7 @@ client.on("messageCreate", async message => {
 						}],
 					})
 
-					console.log("Added a cape to " + args[0] + "!")
+					console.log(logSymbols.info, "Added a cape to " + args[0] + "!")
 				} else {
 					message.reply("Add a image to your request.")
 				}
