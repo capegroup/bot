@@ -2,7 +2,7 @@ import {Client, Intents} from "discord.js"
 import fs from "fs"
 import axios from "axios"
 import logSymbols from "log-symbols"
-
+import path from "path";
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
 
 if(!fs.existsSync("config.json")) {
@@ -35,6 +35,11 @@ client.on("messageCreate", async message => {
 				if(message.attachments.size != 0) {
 					const attachment = [...message.attachments.values()][0]
 					
+					if(!checkPrefix(config.capedir, config.capedir + args[0] + ".png")) {
+						message.reply("Bruh.. Path traversal.. Really?")
+						return
+					}
+
 					await download_image(attachment.url, config.capedir + args[0] + ".png")
 					
 					message.reply({
@@ -69,5 +74,11 @@ const download_image = (url, image_path) =>
 					.on("error", e => reject(e))
 			}),
 	)
+
+function checkPrefix(prefix, candidate) {
+	let absPrefix = path.resolve(prefix) + path.sep;
+	let absCandidate = path.resolve(candidate) + path.sep;
+	return absCandidate.substring(0, absPrefix.length) === absPrefix;
+}
 
 client.login(config.token)
