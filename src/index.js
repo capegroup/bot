@@ -88,6 +88,26 @@ client.on("messageCreate", async message => {
 			} else {
 				message.reply("Missing argument or too many arguments.")
 			}
+		} else if(command == "#remove_cosmetic") {
+			if(args.length === 2) {
+				const cosmetics = await db.get(args[1])
+				
+				if(!cosmetics) {
+					message.reply("You've never had cosmetics!");
+					return;
+				}
+
+				if(cosmetics.includes(args[0])) {
+					message.reply("Removed " + args[0] + " from " + args[1]+"!")
+					let userCosmetics = await db.get(args[1]);
+					userCosmetics = userCosmetics.filter(e => e !== args[0]);
+					await db.set(args[1], userCosmetics)
+				} else {
+					message.reply("You don't have " + args[0] + "!")
+				}
+			} else {
+				message.reply("Missing argument or too many arguments.")
+			}
 		}
 	}
 })
