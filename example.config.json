@@ -1,4 +1,4 @@
 {
 	"token": "token",
-	"capedir": "../server/capes/"
+	"server": "../server"
 }

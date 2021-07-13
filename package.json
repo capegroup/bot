@@ -16,6 +16,8 @@
   },
   "homepage": "https://github.com/capegroup/bot#readme",
   "dependencies": {
+    "@joshdb/core": "^1.2.5",
+    "@joshdb/sqlite": "^1.1.9",
     "axios": "^0.21.1",
     "discord.js": "^13.0.0-dev.d433fe8.1626004976",
     "log-symbols": "^5.0.0",

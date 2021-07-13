@@ -3,6 +3,10 @@ import fs from "fs"
 import axios from "axios"
 import logSymbols from "log-symbols"
 import path from "path";
+import Josh from "@joshdb/core";
+import provider from "@joshdb/sqlite";
+
+
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
 
 if(!fs.existsSync("config.json")) {
@@ -12,11 +16,18 @@ if(!fs.existsSync("config.json")) {
 
 const config = JSON.parse(fs.readFileSync("config.json").toString())
 
-if(!fs.existsSync(config.capedir)) {
+if(!fs.existsSync(path.resolve(config.server, "capes/"))) {
 	console.log(logSymbols.error, "Could not find directory to store capes in! Fix your config.json")
 	process.exit(0)
 }
 
+const db = new Josh({
+	name: "gm_capegroup",
+	provider,
+	providerOptions: {
+		dataDir: config.server + "/data/"
+	}
+})
 
 client.on("ready", async () => {
 	console.log(logSymbols.success, `Logged in as ${client.user.tag}!`)
@@ -35,12 +46,12 @@ client.on("messageCreate", async message => {
 				if(message.attachments.size != 0) {
 					const attachment = [...message.attachments.values()][0]
 					
-					if(!checkPrefix(config.capedir, config.capedir + args[0] + ".png")) {
+					if(!checkPrefix(config.server, config.server + "/capes/" + args[0] + ".png")) {
 						message.reply("Bruh.. Path traversal.. Really?")
 						return
 					}
 
-					await download_image(attachment.url, config.capedir + args[0] + ".png")
+					await download_image(attachment.url, config.server + "/capes/" + args[0] + ".png")
 					
 					message.reply({
 						embeds: [{
@@ -56,6 +67,26 @@ client.on("messageCreate", async message => {
 				}
 			} else {
 				message.reply("Missing argument or too much spaces.")
+			}
+		} else if(command == "#cosmetic") {
+			if(args.length === 2) {
+				const cosmetics = fs.readdirSync(path.resolve(config.server + "/src/cosmetics/"));
+				if(cosmetics.includes(args[0])) {
+					message.reply("Added cosmetic " + args[0] + " to " + args[1] + "! Restart your game to see it load (Only 1.15-1.16)")
+					const userCosmetics = await db.get(args[1]);
+					if(userCosmetics) {
+						userCosmetics.push(args[0])
+
+						await db.set(args[1], userCosmetics);
+					} else {
+						await db.set(args[1], [args[0]])
+					}
+				} else {
+					message.reply("Cosmetic " + args[0] + " does not exist! Available cosmetics: " + cosmetics.join(", "))
+
+				}
+			} else {
+				message.reply("Missing argument or too many arguments.")
 			}
 		}
 	}
