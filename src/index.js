@@ -96,11 +96,11 @@ client.on("messageCreate", async message => {
 						if(userCosmetics.includes(args[0])) {
 							message.reply("You already have " + args[0] + "!")
 						} else {
+							message.reply("Added cosmetic " + args[0] + " to " + args[1] + "! Restart your game to see it load (Only 1.15-1.16)")
+							
 							userCosmetics.push(args[0])
 
 							await db.set(args[1], userCosmetics);
-
-							message.reply("Added cosmetic " + args[0] + " to " + args[1] + "! Restart your game to see it load (Only 1.15-1.16)")
 						}
 					} else {
 						await db.set(args[1], [args[0]])
