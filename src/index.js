@@ -126,6 +126,10 @@ client.on("messageCreate", async message => {
 			} else {
 				message.reply("Missing argument or too many arguments.")
 			}
+		} else if(command == "#cosmetics") {
+			const cosmetics = fs.readdirSync(path.resolve(config.server + "/src/cosmetics/"));
+			
+			message.reply("Available cosmetics: " + cosmetics.join(", "))
 		}
 	}
 })
