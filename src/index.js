@@ -25,7 +25,13 @@ import provider from "@joshdb/sqlite";
 import config from "../config.js"
 
 const client = new Client({ 
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+	presence: {
+        activities: [{
+            name: `${config.prefix}help`,
+            type: "COMPETING",
+        }]
+    }
 })
 
 client.db = new Josh({
