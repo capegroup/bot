@@ -34,9 +34,15 @@ export default {
 					if(userCosmetics.includes(args[0])) {
 						message.reply("You already have " + args[0] + "!")
 					} else {
-						message.reply("Added cosmetic " + args[0] + " to " + args[1] + "! Restart your game to see it load (Only 1.15-1.16)")
-						console.log(logSymbols.info, "Added " + args[0] + " to " + args[1] + "!")
+						message.reply({
+							embeds: [{
+								"title": "Added cosmetic " + args[0] + " to " + args[1] + "!",
+								"description": " Restart your game to see it load (Only 1.15-1.16)",
+								"color": 53380
+							}],
+						})
 
+						console.log(logSymbols.info, "Added " + args[0] + " to " + args[1] + "!")
 						userCosmetics.push(args[0])
 
 						await client.db.set(args[1], userCosmetics);

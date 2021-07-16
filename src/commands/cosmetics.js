@@ -25,6 +25,12 @@ export default {
 	run: (client, message, args) => {
 		const cosmetics = fs.readdirSync(path.resolve(config.server + "/src/cosmetics/"));
 					
-		message.reply("Available cosmetics: " + cosmetics.join(", "))
+		message.reply({
+			embeds: [{
+				"title": `There are ${cosmetics.length} cosmetics available!`,
+				"description": cosmetics.join(", "),
+				"color": 53380
+			}],
+		})
 	}
 }

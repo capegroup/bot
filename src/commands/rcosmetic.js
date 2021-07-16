@@ -28,7 +28,14 @@ export default {
 			}
 
 			if(cosmetics.includes(args[0])) {
-				message.reply("Removed " + args[0] + " from " + args[1]+"!")
+				message.reply({
+					embeds: [{
+						"title": "Removed " + args[0] + " from " + args[1]+"!",
+						"description": " Restart your game to see it update!",
+						"color": 53380
+					}],
+				})
+
 				console.log(logSymbols.info, "Removed " + args[0] + " from " + args[1] + "!")
 
 				let userCosmetics = await client.db.get(args[1]);
