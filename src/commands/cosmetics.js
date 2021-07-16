@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /*
     capegroup - a cape service, without the controversy
     Copyright (C) 2021 capegroup
@@ -16,21 +17,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-import config from "../../config.js"
+import config from '../../config.js';
 
 export default {
-	run: (client, message, args) => {
-		const cosmetics = fs.readdirSync(path.resolve(config.server + "/src/cosmetics/"));
-					
-		message.reply({
-			embeds: [{
-				"title": `There are ${cosmetics.length} cosmetics available!`,
-				"description": cosmetics.join(", "),
-				"color": 53380
-			}],
-		})
-	}
-}
+  run: (client, message) => {
+    const cosmetics = fs.readdirSync(path.resolve(`${config.server}/src/cosmetics/`));
+
+    message.reply({
+      embeds: [{
+        title: `There are ${cosmetics.length} cosmetics available!`,
+        description: cosmetics.join(', '),
+        color: 53380,
+      }],
+    });
+  },
+};

@@ -17,24 +17,24 @@
 */
 
 export default {
-	run: async (client, message, args) => {
-		if(args.length === 1) {
-			const cosmetics = await client.db.get(args[0])
-			
-			if(!cosmetics) {
-				message.reply("You've never had cosmetics!");
-				return;
-			}
+  run: async (client, message, args) => {
+    if (args.length === 1) {
+      const cosmetics = await client.db.get(args[0]);
 
-			message.reply({
-				embeds: [{
-					"title": `You currently have ${cosmetics.length} cosmetic${cosmetics.length == 1 ? "" : "s"}!`,
-					"description": cosmetics.join(", "),
-					"color": 53380
-				}],
-			})
-		} else {
-			message.reply("Missing argument or too many arguments.")
-		}
-	}
-}
+      if (!cosmetics) {
+        message.reply("You've never had cosmetics!");
+        return;
+      }
+
+      message.reply({
+        embeds: [{
+          title: `You currently have ${cosmetics.length} cosmetic${cosmetics.length === 1 ? '' : 's'}!`,
+          description: cosmetics.join(', '),
+          color: 53380,
+        }],
+      });
+    } else {
+      message.reply('Missing argument or too many arguments.');
+    }
+  },
+};

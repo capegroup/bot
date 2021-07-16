@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable import/extensions */
 /*
     capegroup - a cape service, without the controversy
     Copyright (C) 2021 capegroup
@@ -16,46 +18,45 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import fs from "fs";
-import path from "path";
-import logSymbols from "log-symbols"
+import fs from 'fs';
+import path from 'path';
+import logSymbols from 'log-symbols';
 
-import config from "../../config.js"
+import config from '../../config.js';
 
 export default {
-	run: async (client, message, args) => {
-		if(args.length === 2) {
-			const cosmetics = fs.readdirSync(path.resolve(config.server + "/src/cosmetics/"));
+  run: async (client, message, args) => {
+    if (args.length === 2) {
+      const cosmetics = fs.readdirSync(path.resolve(`${config.server}/src/cosmetics/`));
 
-			if(cosmetics.includes(args[0])) {
-				const userCosmetics = await client.db.get(args[1]);
-				
-				if(userCosmetics) {
-					if(userCosmetics.includes(args[0])) {
-						message.reply("You already have " + args[0] + "!")
-					} else {
-						message.reply({
-							embeds: [{
-								"title": "Added cosmetic " + args[0] + " to " + args[1] + "!",
-								"description": " Restart your game to see it load (Only 1.15-1.16)",
-								"color": 53380
-							}],
-						})
+      if (cosmetics.includes(args[0])) {
+        const userCosmetics = await client.db.get(args[1]);
 
-						console.log(logSymbols.info, "Added " + args[0] + " to " + args[1] + "!")
-						userCosmetics.push(args[0])
+        if (userCosmetics) {
+          if (userCosmetics.includes(args[0])) {
+            message.reply(`You already have ${args[0]}!`);
+          } else {
+            message.reply({
+              embeds: [{
+                title: `Added cosmetic ${args[0]} to ${args[1]}!`,
+                description: ' Restart your game to see it load (Only 1.15-1.16)',
+                color: 53380,
+              }],
+            });
 
-						await client.db.set(args[1], userCosmetics);
-					}
-				} else {
-					await client.db.set(args[1], [args[0]])
-				}
-			} else {
-				message.reply("Cosmetic " + args[0] + " does not exist! Available cosmetics: " + cosmetics.join(", "))
+            console.log(logSymbols.info, `Added ${args[0]} to ${args[1]}!`);
+            userCosmetics.push(args[0]);
 
-			}
-		} else {
-			message.reply("Missing argument or too many arguments.")
-		}
-	}
-}
+            await client.db.set(args[1], userCosmetics);
+          }
+        } else {
+          await client.db.set(args[1], [args[0]]);
+        }
+      } else {
+        message.reply(`Cosmetic ${args[0]} does not exist! Available cosmetics: ${cosmetics.join(', ')}`);
+      }
+    } else {
+      message.reply('Missing argument or too many arguments.');
+    }
+  },
+};

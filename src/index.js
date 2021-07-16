@@ -1,3 +1,6 @@
+/* eslint-disable import/extensions */
+/* eslint-disable no-console */
+
 /*
     capegroup - a cape service, without the controversy
     Copyright (C) 2021 capegroup
@@ -16,53 +19,53 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import {Client, Intents} from "discord.js"
-import logSymbols from "log-symbols"
-import fs from "fs";
-import Josh from "@joshdb/core";
-import provider from "@joshdb/sqlite";
+import { Client, Intents } from 'discord.js';
+import logSymbols from 'log-symbols';
+import fs from 'fs';
+import Josh from '@joshdb/core';
+import provider from '@joshdb/sqlite';
 
-import config from "../config.js"
+import config from '../config.js';
 
-const client = new Client({ 
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
-	presence: {
-        activities: [{
-            name: `${config.prefix}help`,
-            type: "COMPETING",
-        }]
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  presence: {
+    activities: [{
+      name: `${config.prefix}help`,
+      type: 'COMPETING',
+    }],
+  },
+  ws: {
+    properties: {
+      $browser: 'Discord iOS',
     },
-    ws: {
-        properties: { 
-            $browser: "Discord iOS" 
-        }
-    }
-})
+  },
+});
 
 client.db = new Josh({
-	name: "gm_capegroup",
-	provider,
-	providerOptions: {
-		dataDir: config.server + "/data/"
-	}
-})
+  name: 'gm_capegroup',
+  provider,
+  providerOptions: {
+    dataDir: `${config.server}/data/`,
+  },
+});
 
-client.on("ready", async () => {
-	console.log(logSymbols.success, `Logged in as ${client.user.tag}!`)
-})
+client.on('ready', async () => {
+  console.log(logSymbols.success, `Logged in as ${client.user.tag}!`);
+});
 
-client.on("messageCreate", async message => {
-	const args = message.content.split(" ")
-	const command = args.shift()
+client.on('messageCreate', async (message) => {
+  const args = message.content.split(' ');
+  const command = args.shift();
 
-	if(command.startsWith(config.prefix)) {
-		const onlyNames = fs.readdirSync("./src/commands").map(e => e.split(".js")[0]);
+  if (command.startsWith(config.prefix)) {
+    const onlyNames = fs.readdirSync('./src/commands').map((e) => e.split('.js')[0]);
 
-		if(onlyNames.includes(command.substring(1))) {
-			const nodeCommand = await import(`./commands/${command.substring(1)}.js`);
-			nodeCommand.default.run(client, message, args);
-		}
-	}
-})
+    if (onlyNames.includes(command.substring(1))) {
+      const nodeCommand = await import(`./commands/${command.substring(1)}.js`);
+      nodeCommand.default.run(client, message, args);
+    }
+  }
+});
 
-client.login(config.token)
+client.login(config.token);

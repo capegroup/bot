@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*
     capegroup - a cape service, without the controversy
     Copyright (C) 2021 capegroup
@@ -15,38 +16,38 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-import logSymbols from "log-symbols"
+import logSymbols from 'log-symbols';
 
 export default {
-	run: async (client, message, args) => {
-		if(args.length === 2) {
-			const cosmetics = await client.db.get(args[1])
-			
-			if(!cosmetics) {
-				message.reply("You've never had cosmetics!");
-				return;
-			}
+  run: async (client, message, args) => {
+    if (args.length === 2) {
+      const cosmetics = await client.db.get(args[1]);
 
-			if(cosmetics.includes(args[0])) {
-				message.reply({
-					embeds: [{
-						"title": "Removed " + args[0] + " from " + args[1]+"!",
-						"description": " Restart your game to see it update!",
-						"color": 53380
-					}],
-				})
+      if (!cosmetics) {
+        message.reply("You've never had cosmetics!");
+        return;
+      }
 
-				console.log(logSymbols.info, "Removed " + args[0] + " from " + args[1] + "!")
+      if (cosmetics.includes(args[0])) {
+        message.reply({
+          embeds: [{
+            title: `Removed ${args[0]} from ${args[1]}!`,
+            description: ' Restart your game to see it update!',
+            color: 53380,
+          }],
+        });
 
-				let userCosmetics = await client.db.get(args[1]);
-				userCosmetics = userCosmetics.filter(e => e !== args[0]);
-				
-				await client.db.set(args[1], userCosmetics)
-			} else {
-				message.reply("You don't have " + args[0] + "!")
-			}
-		} else {
-			message.reply("Missing argument or too many arguments.")
-		}
-	}
-}
+        console.log(logSymbols.info, `Removed ${args[0]} from ${args[1]}!`);
+
+        let userCosmetics = await client.db.get(args[1]);
+        userCosmetics = userCosmetics.filter((e) => e !== args[0]);
+
+        await client.db.set(args[1], userCosmetics);
+      } else {
+        message.reply(`You don't have ${args[0]}!`);
+      }
+    } else {
+      message.reply('Missing argument or too many arguments.');
+    }
+  },
+};
