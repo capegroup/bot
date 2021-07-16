@@ -31,6 +31,11 @@ const client = new Client({
             name: `${config.prefix}help`,
             type: "COMPETING",
         }]
+    },
+    ws: {
+        properties: { 
+            $browser: "Discord iOS" 
+        }
     }
 })
 
