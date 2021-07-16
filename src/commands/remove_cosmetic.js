@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+import logSymbols from "log-symbols"
 
 export default {
 	run: async (client, message, args) => {
@@ -28,7 +29,8 @@ export default {
 
 			if(cosmetics.includes(args[0])) {
 				message.reply("Removed " + args[0] + " from " + args[1]+"!")
-				
+				console.log(logSymbols.info, "Removed " + args[0] + " from " + args[1] + "!")
+
 				let userCosmetics = await client.db.get(args[1]);
 				userCosmetics = userCosmetics.filter(e => e !== args[0]);
 				

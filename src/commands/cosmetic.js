@@ -18,6 +18,7 @@
 
 import fs from "fs";
 import path from "path";
+import logSymbols from "log-symbols"
 
 import config from "../../config.js"
 
@@ -34,6 +35,7 @@ export default {
 						message.reply("You already have " + args[0] + "!")
 					} else {
 						message.reply("Added cosmetic " + args[0] + " to " + args[1] + "! Restart your game to see it load (Only 1.15-1.16)")
+						console.log(logSymbols.info, "Added " + args[0] + " to " + args[1] + "!")
 
 						userCosmetics.push(args[0])
 
